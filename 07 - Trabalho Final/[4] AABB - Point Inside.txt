@@ -1,0 +1,125 @@
+//AABB + Point Inside
+//O ponto pode ser movimentado com as setas do teclado.
+let pts = [];
+let aabb = null;
+let p = null;
+
+function setup() {
+  
+  createCanvas(400, 400);
+  
+  let n = 10 + round(10*random());  
+  for(i=0;i<n;i++){
+   let x = round(random(width) - width/2) * 0.3;
+   let y = round(random(height) - height/2)* 0.3;
+    pts.push([x,y])
+  }
+  
+  aabb = new AABB(pts);
+  
+  p = [round(random(50,350)),round(random(50,350))];
+  
+}
+
+function draw() {
+  background(50);
+  pts.forEach( drawPoint )
+  aabb.drawBox();
+  circle(p[0],p[1],10);
+  aabb.pointInside(p);
+}
+
+function drawPoint(point){
+  stroke(220);
+  circle( point[0] + width/2 , height/2 - point[1] , 5 )
+}
+
+class AABB{
+  
+  constructor(pts){
+    this.pts = pts;
+    this.analise();
+  }
+  
+  drawBox(){
+    
+    this.x1 = this.minX+ width/2;
+    this.y1 = height/2 -this.maxY;
+    this.x2 = this.maxX+ width/2;
+    this.y2 = height/2 -this.minY;
+    
+    this.lx = this.x2 - this.x1;
+    this.ly = this.y2 - this.y1;
+    
+    
+    noFill();
+    stroke(200,200,100);
+    rect(this.x1,this.y1,this.lx,this.ly);
+    stroke(220,100,100);
+    fill(220,100,100);
+    circle(this.x1,this.y1,5);
+    circle(this.x2,this.y2,5);
+    stroke(100);
+    fill(100);
+  }
+  
+  analise(){
+    
+    this.minX = this.pts[0][0];
+    this.minY = this.pts[0][1];
+    this.maxX = this.pts[0][0];
+    this.maxY = this.pts[0][1]
+    
+    this.pts.forEach(p=>{
+      
+      if(this.minX > p[0]){
+        this.minX = p[0];
+      }
+      
+       if(this.minY > p[1]){
+        this.minY = p[1];
+      }
+
+      if(this.maxX < p[0]){
+        this.maxX =p[0];
+      }
+      
+       if(this.maxY < p[1]){
+        this.maxY = p[1];
+      }
+      
+    })    
+  }
+  
+  pointInside(p){
+    
+    let px = p[0];
+    let py = p[1];
+    
+    if( px > this.x1 &&  
+        py > this.y1 &&
+        px < this.x1 + this.lx &&
+        py < this.y1 + this.ly
+      ){
+      stroke(200,200,100);
+      fill(200,200,100);
+      text('COLLISION',15,10);
+      stroke(255);
+      fill(255);
+    }
+    
+  }
+  
+}
+
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    p[0] -= 10;
+  } else if (keyCode === RIGHT_ARROW) {
+    p[0] += 10;
+  } else if (keyCode === UP_ARROW){
+    p[1] -= 10;
+  } else if (keyCode === DOWN_ARROW){
+    p[1] += 10;
+  }
+}

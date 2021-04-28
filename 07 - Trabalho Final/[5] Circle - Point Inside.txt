@@ -1,0 +1,46 @@
+//Controle o ponto com o mouse.
+circleOne = null;
+pointOne = null;
+
+function setup() {
+  createCanvas(400, 400);
+  circleOne = new CircleBox(round(random(150,350)),round(random(150,350)),25);
+}
+
+function draw() {
+  background(50);
+  circleOne.drawBox();
+  pointOne = {x: mouseX, y:mouseY};
+  circle(pointOne.x,pointOne.y,10);
+  circleOne.pointInside(pointOne);
+}
+
+class CircleBox{
+  
+  constructor(cX,cY,r){
+    this.cX = cX;
+    this.cY = cY;
+    this.r = r;
+    this.d = 2*r;
+  }
+  
+  drawBox(){
+    noFill();
+    stroke(255);
+    circle(this.cX,this.cY,this.d);
+  }
+  
+  pointInside(point){
+    
+    let dx = this.cX - point.x;
+    let dy = this.cY - point.y;
+    let d = sqrt(dx*dx+dy*dy);
+    
+    if( d < this.r ){
+      fill(200,200,100);
+      stroke(200,200,100);
+      text("Point Inside!!!",10,15);
+    }
+    
+  }
+}

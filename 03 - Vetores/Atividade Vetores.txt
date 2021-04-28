@@ -1,0 +1,89 @@
+let va,vb;
+let ua,ub;
+let svua, svub;
+
+let green, red, blue, yellow;
+
+function setup() {
+  createCanvas(500, 500);  
+  
+  green = color(100,200,100);
+  yellow = color(200,200,100);
+  red = color(200,100,100);
+  blue = color(100,100,200);
+  
+}
+
+function draw() {
+  background(50);
+  strokeWeight(5);  
+  vetorInversoExemplo();
+}
+
+function drawVec(a,b,color){
+  stroke(color);
+  line(a.x,a.y,b.x,b.y);
+  fill(color)
+  ellipse(b.x,b.y,10,10);
+}
+
+function somaVetoresExemplo(){
+  
+  va = new createVector(10,10);
+  vb = new createVector(50,50);
+  ua = new createVector(70,130);
+  ub = new createVector(100,100);
+  svua = new createVector( va.x + ua.x, va.y + ua.y);
+  svub = new createVector( vb.x + ub.x, vb.x + ub.y);
+  
+  drawVec(va,vb,green);
+  drawVec(ua,ub,blue);
+  drawVec(svua,svub,yellow);
+  
+}
+
+function subtraiVetoresExemplo(){
+  
+  va = new createVector(10,10);
+  vb = new createVector(50,50);
+  ua = new createVector(70,130);
+  ub = new createVector(100,100);
+  svua = new createVector( ( va.x - ua.x) + 200, ( va.y - ua.y) + 200);
+  svub = new createVector( ( vb.x - ub.x) + 200, ( vb.x - ub.y) + 200);
+  
+  drawVec(va,vb,green);
+  drawVec(ua,ub,blue);
+  drawVec(svua,svub,yellow);
+}
+
+function multiplicacaoPorEscalarExemplo(n){
+  
+  va = new createVector(10,10);
+  vb = new createVector(50,50);
+  
+  va.x = va.x * n;
+  va.y = va.y * n;
+  vb.x = vb.x * n;
+  vb.y = vb.y * n;
+  
+  drawVec(va,vb,green);
+}
+
+function vetorInversoExemplo(){
+   va = new createVector(10,10);
+   vb = new createVector(50,50);
+   drawVec(va,vb,green)
+   va.x = va.x * -1 + 200;
+   va.y = va.y * -1 + 200;
+   vb.x = vb.x * -1 + 200;
+   vb.y = vb.y * -1 + 200;
+   drawVec(va,vb,green);
+
+  
+function prodEscalar(a,b){
+  return a.x * b.x + a.y + b.y;
+}
+
+function prodVetorial(a,b){
+  return ( ( a.x * b.y)  - ( b.x * a.y) );
+}

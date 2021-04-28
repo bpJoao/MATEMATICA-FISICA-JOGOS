@@ -1,0 +1,85 @@
+let pts = [];
+let cbb = null;
+
+function setup() {
+  
+  createCanvas(400, 400);
+  
+  for(i=0;i<10;i++){
+    let randomX = round(random(150,250))
+    let randomY = round(random(150,250))
+    pts.push( [randomX,randomY] );
+  }
+  
+  cbb = new CBB(pts);
+  
+}
+
+function draw() {
+  
+  background(50);
+  pts.forEach(drawPoint);
+  cbb.drawBox();
+  
+}
+
+function drawPoint(p){
+  stroke(255)
+  circle(p[0],p[1],5);
+}
+
+class CBB{
+  
+  constructor(pts){
+    this.pts = pts;
+    this.analise();
+  }
+  
+  analise(){
+    
+    this.cx = 0;
+    this.cy = 0;
+    this.dc = 0;
+    
+    //laço para gerar a soma para tirar as médias
+    this.pts.forEach(  p=>{
+      this.cx += p[0];
+      this.cy += p[1];
+    } );
+       
+    this.cx = this.cx / this.pts.length;
+    this.cy = this.cy / this.pts.length;
+    
+    //laço para saber qual ponto está mais distante do centro
+    this.pts.forEach(  p=>{
+      let dx = p[0]-this.cx;
+      let dy = p[1]-this.cy;
+      let aux = sqrt(  dx*dx + dy*dy );
+      console.log('AUX: '+ aux)
+      if( this.dc < aux ){
+       this.dc = aux;
+      }
+    } );
+
+    console.log(this.cx + '  ' + this.cy) 
+    console.log(this.dc)
+    
+  }
+  
+  drawBox(){
+    
+    //centro
+    stroke(200,200,100);
+    fill(200,200,100);
+    circle(this.cx,this.cy,5);
+    //border
+    stroke(220,220,80);
+    noFill();
+    circle(this.cx,this.cy,this.dc*2);
+    
+    //reset
+    fill(255);
+    stroke(255);
+  }
+  
+}

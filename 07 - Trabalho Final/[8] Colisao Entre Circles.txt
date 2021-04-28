@@ -1,0 +1,64 @@
+//O circulo pode ser movimentado com as setas do teclado
+let circleOne = null, circleTwo = null;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  let rX = round(random(50,350));
+  let rY = round(random(50,350));
+  circleOne = new CircleBox(rX,rY,50);
+  
+  rX = round(random(50,350));
+  rY = round(random(50,350));
+  circleTwo = new CircleBox(rX,rY,50);
+}
+
+function draw() {
+  background(50);
+  circleTwo.drawBox();
+  circleOne.drawBox();
+  analiseCollision(circleOne,circleTwo);
+}
+
+class CircleBox{
+  
+  constructor(cX,cY,r){
+    this.cX = cX;
+    this.cY = cY;
+    this.r = r;
+    this.d = 2*r;
+  }
+  
+  drawBox(){
+    noFill();
+    stroke(255);
+    circle(this.cX,this.cY,this.d);
+  }
+  
+}
+
+function analiseCollision(circleOne,circleTwo){
+  
+  let dx = circleOne.cX - circleTwo.cX;
+  let dy = circleOne.cY - circleTwo.cY;
+  let distance = Math.sqrt(dx * dx + dy * dy);
+  
+  if (distance < circleOne.r + circleTwo.r) {
+      fill(200,200,100);
+      stroke(200,200,100);
+      text("COLLISION!!!",10,15);
+  }
+  
+}
+
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    circleOne.cX -= 10;
+  } else if (keyCode === RIGHT_ARROW) {
+    circleOne.cX += 10;
+  }  else if (keyCode === UP_ARROW) {
+    circleOne.cY -= 10;
+  }  else if (keyCode === DOWN_ARROW) {
+    circleOne.cY += 10;
+  }
+}

@@ -1,0 +1,103 @@
+let  rectOne = null, circleOne = null;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  let rX = round(random(50,350));
+  let rY = round(random(50,350));
+  let lX = round(random(20,70));
+  let lY = round(random(20,70));
+  
+  rectOne = new RectBox(rX,rY,lX,lY);
+  
+  rX = round(random(50,350));
+  rY = round(random(50,350));
+  lX = round(random(20,70));
+  lY = round(random(20,70));
+
+  circleOne = new CircleBox(rX,rY,45);
+  
+}
+
+function draw() {
+  background(50);
+  rectOne.drawBox();
+  circleOne.drawBox();
+  analiseCollisionCircle(rectOne,circleOne)
+  text("MOVA COM AS SETAS DO TECLADO!",90,15);
+}
+
+class RectBox{
+    
+  constructor( x, y, lx, ly,color ){
+    this.x = x;
+    this.y = y;
+    this.lx = lx;
+    this.ly = ly;
+  }
+  
+  drawBox(){
+    noFill();
+    stroke(255);
+    rect(this.x,this.y,this.lx,this.ly);
+  }
+  
+}
+
+class CircleBox{
+  
+  constructor(cX,cY,r){
+    this.cX = cX;
+    this.cY = cY;
+    this.r = r;
+    this.d = 2*r;
+  }
+  
+  drawBox(){
+    noFill();
+    stroke(255);
+    circle(this.cX,this.cY,this.d);
+  }
+  
+}
+
+
+function analiseCollisionCircle(rect, circle){
+  
+  let testX = circle.cX;
+  let testY = circle.cY;
+  
+  if ( circle.cX < rect.x){        
+    testX = rect.x;
+  } else if (circle.cX > rect.x + rect.lx){
+    testX = rect.x + rect.lx; 
+  } if (circle.cY < rect.y) {
+    testY = rect.y;
+  } else if (circle.cY > rect.y+rect.ly){ 
+    testY = rect.y+rect.ly;
+  }
+  
+  let dx = circle.cX - testX;
+  let dy = circle.cY - testY;
+  let d = sqrt( (dx*dx) + (dy*dy) )
+
+  if (d <= circle.r) {
+    fill(200,200,100);
+    stroke(200,200,100);
+    text("COLLISION!!!",10,15);
+  }
+  return false;
+  
+}
+
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    rectOne.x -= 10;
+  } else if (keyCode === RIGHT_ARROW) {
+    rectOne.x += 10;
+  } else if (keyCode === UP_ARROW){
+    rectOne.y -= 10;
+  } else if (keyCode === DOWN_ARROW){
+    rectOne.y += 10;
+  }
+}

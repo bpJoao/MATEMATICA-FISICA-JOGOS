@@ -1,0 +1,53 @@
+function setup() {
+  createCanvas(800, 800);
+}
+
+function quadrado_pseudo_referencia(s_height,s_width){
+  
+  strokeWeight(3);
+  stroke(255);
+  fill(0);
+  rect(height/2 - s_height/2,width/2-s_width/2,s_height,s_width);
+  
+  fill(255);
+  strokeWeight(0);
+  text("(+1,+1)",width/2 + 255,150);
+  text("(-1,+1)",150 - 45,150);
+  text("(-1,-1)",150 - 45,height - 145);
+  text("(+1,-1)",width/2 + 255,height - 145);
+}
+
+function eixos(){
+  
+  let breathe = 40;
+  
+  // Y - Ordenadas
+  strokeWeight(3);
+  stroke(230,0,0);
+  line(width/2,0 + breathe,width/2,height - breathe);
+  line(width/2,height - breathe,width/2 - 10, height - breathe - 10);
+  line(width/2,height - breathe,width/2 + 10, height - breathe - 10);
+  
+  //  X - Abcissas
+  strokeWeight(3);
+  stroke(0,90,180);
+  line(0 + breathe,height/2,width - breathe,height/2)
+  line(width - breathe,height/2, width - breathe - 10 ,height/2 - 10);
+  line(width - breathe,height/2, width - breathe - 10 ,height/2 + 10);
+}
+
+function mouse_line(){
+  strokeWeight(3);
+  stroke(255);
+  line(height/2, width/2, mouseX, mouseY)
+}
+
+function draw() {
+  
+  background(0);
+  
+  quadrado_pseudo_referencia(500,500);
+  eixos();
+  mouse_line()
+  
+}

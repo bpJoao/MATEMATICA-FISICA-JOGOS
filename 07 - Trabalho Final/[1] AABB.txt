@@ -1,0 +1,89 @@
+//AABB
+
+let pts = [];
+let aabb = null;
+
+function setup() {
+  
+  createCanvas(400, 400);
+  
+  let n = 10 + round(10*random());  
+  for(i=0;i<n;i++){
+   let x = round(random(width) - width/2) * 0.3;
+   let y = round(random(height) - height/2)* 0.3;
+    pts.push([x,y])
+  }
+  
+  aabb = new AABB(pts);
+  
+}
+
+function draw() {
+  background(50);
+  pts.forEach( drawPoint )
+  aabb.drawBox();
+}
+
+function drawPoint(point){
+  stroke(220);
+  circle( point[0] + width/2 , height/2 - point[1] , 5 )
+}
+
+class AABB{
+  
+  constructor(pts){
+    this.pts = pts;
+    this.analise();
+  }
+  
+  drawBox(){
+    
+    this.x1 = this.minX+ width/2;
+    this.y1 = height/2 -this.maxY;
+    this.x2 = this.maxX+ width/2;
+    this.y2 = height/2 -this.minY;
+    
+    this.lx = this.x2 - this.x1;
+    this.ly = this.y2 - this.y1;
+    
+    
+    noFill();
+    stroke(200,200,100);
+    rect(this.x1,this.y1,this.lx,this.ly);
+    stroke(220,100,100);
+    fill(220,100,100);
+    circle(this.x1,this.y1,5);
+    circle(this.x2,this.y2,5);
+    stroke(100);
+    fill(100);
+  }
+  
+  analise(){
+    
+    this.minX = this.pts[0][0];
+    this.minY = this.pts[0][1];
+    this.maxX = this.pts[0][0];
+    this.maxY = this.pts[0][1]
+    
+    this.pts.forEach(p=>{
+      
+      if(this.minX > p[0]){
+        this.minX = p[0];
+      }
+      
+       if(this.minY > p[1]){
+        this.minY = p[1];
+      }
+
+      if(this.maxX < p[0]){
+        this.maxX =p[0];
+      }
+      
+       if(this.maxY < p[1]){
+        this.maxY = p[1];
+      }
+      
+    })    
+  }
+  
+}

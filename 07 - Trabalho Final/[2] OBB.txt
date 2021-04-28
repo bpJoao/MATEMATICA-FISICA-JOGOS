@@ -1,0 +1,111 @@
+//OBB
+
+let points = [];
+let obb = null;
+
+function setup() {
+  createCanvas(400, 400);
+  let n = 10 + round(10*random())
+  
+  for(i=0;i<n;i++){
+   let x = round(random(width) - width/2) * 0.3;
+   let y = round(random(height) - height/2)* 0.3;
+    points.push([x,y])
+  }
+  
+  obb = new OBB(points, [1,1]);
+}
+
+function draw() {
+  background(50);
+  points.forEach( drawPoint )
+  obb.drawBox();
+}
+
+function drawPoint(point){
+  stroke(220);
+  circle( point[0] + width/2 , height/2 - point[1] , 5 )
+}
+
+function drawCenter(p){
+  stroke(220,100,100);
+  fill(220,100,100)
+  circle( p[0] + width/2 , height/2 - p[1] , 5 )
+  stroke(200)
+  fill(200);
+}
+
+function normalize(v){
+  let l = sqrt(prodEscalar(v,v));
+  return [ v[0]/l, v[1]/l ];
+}
+
+function prodEscalar(u,v){
+  return u[0]*v[0] + u[1]*v[1]; 
+}
+
+function project(pts,v){
+  let mi = Infinity, ma = -Infinity;
+  for(i=0;i<pts.length;i++){
+    proj = prodEscalar(v,pts[i]);
+    mi = min(mi,proj);
+    ma = max(ma,proj);
+  }
+  return [mi,ma]
+}
+
+function mul(v,s){
+  return [v[0]*s, v[1]*s];
+}
+
+function sum(v,u){
+  return [v[0]+u[0], v[1]+u[1]];
+}
+
+class OBB{
+  
+  constructor(pts, u){
+    
+    u = normalize(u)
+    this.u = u
+    this.v = [-u[1], u[0]];
+    
+    this.pu = project(pts,this.u)
+    this.pv = project(pts,this.v)
+    
+    let cu = ( this.pu[0] + this.pu[1] ) / 2 ;
+    let cv = ( this.pv[0] + this.pv[1] ) / 2 ;
+    
+    this.c = sum( mul(this.u,cu), mul(this.v,cv) );
+    
+    this.width = this.pu[1] - this.pu[0]
+    this.height = this.pv[1] - this.pv[0]
+    
+    this.w2 = this.width/2
+    this.h2 = this.height/2
+    
+    this.p0 = sum( this.c, sum(mul(this.u,+this.w2),mul(this.v,+this.h2)))
+    this.p1 = sum( this.c, sum(mul(this.u,-this.w2),mul(this.v,+this.h2)))
+    this.p2 = sum( this.c, sum(mul(this.u,-this.w2),mul(this.v,-this.h2)))
+    this.p3 = sum( this.c, sum(mul(this.u,+this.w2),mul(this.v,-this.h2)))
+  
+  }
+  
+  drawBox(){
+            
+    drawCenter(this.c);
+    
+    stroke(220,220,100)
+    noFill();
+    
+    beginShape();
+    vertex(this.p0[0] + width/2, height/2 - this.p0[1]);
+    vertex(this.p1[0] + width/2, height/2 - this.p1[1]);
+    vertex(this.p2[0] + width/2, height/2 - this.p2[1]);
+    vertex(this.p3[0] + width/2, height/2 - this.p3[1]);
+    endShape(CLOSE);
+    
+    stroke(200)
+  }
+  
+}

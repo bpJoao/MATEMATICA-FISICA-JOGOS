@@ -1,0 +1,101 @@
+//universo
+let t = 0;
+let count = 0;
+
+//vetores
+let va,vb,ua,ub;
+let pi;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  va = new createVector(random(10,390),random(10,390)); // A
+  vb = new createVector(random(10,390),random(10,390)); // B
+  ua = new createVector(random(10,390),random(10,390)); // C
+  ub = new createVector(random(10,390),random(10,390)); // D
+  pi = new createVector(random(10,390),random(10,390)); // PONTO DE INTER
+}
+
+function draw() {
+  background(50);
+  strokeWeight(5.5);
+  frameRate(0);
+  drawVec();
+  
+  intersect(va,vb,ua,ub)
+  
+}
+
+function intersect(a,b,c,d,pi){
+  
+  let ab = subVetores(b,a)
+  let ac = subVetores(c,a)
+  let ad = subVetores(d,a)
+  
+  let cd = subVetores(c,d)
+  let ca = subVetores(c,a)
+  let cb = subVetores(c,b)
+  
+  noStroke()
+  fill(250)
+  
+  text("ABxAC: " + prodVetorial(ab,ac), 10,20)
+  text("ABxAD: " + prodVetorial(ab,ad), 10,40)
+  text("CDxCA: " + prodVetorial(cd,ca), 10,60)
+  text("CDxCB: " + prodVetorial(cd,cb), 10,80)
+  
+  if( (
+      isPositive( prodVetorial(ab,ac) * (prodVetorial(ab,ad))
+      ) || (
+      isPositive( prodVetorial(cd,ca) * prodVetorial(cd,cb)))
+      )
+  ){
+     fill(200,200,100);
+     text('Não há interseção!', 10 , 100)
+  }else{
+     fill(200,200,100);
+     text('Há interseção!', 10 , 100)
+  }
+}
+
+function drawVec(){
+  strokeWeight(5);
+  stroke(200,100,100);
+  line(va.x,va.y,vb.x,vb.y);
+  
+  stroke(100,200,100);
+  line(ua.x,ua.y,ub.x,ub.y);
+
+}
+
+function prodVetorial(a,b){
+  return ( ( a.x * b.y)  - ( b.x * a.y) );
+}
+
+function prodEscalar(a,b){
+  return ( (a.x * b.x) + (a.y*b.y));
+}
+
+function subVetores(a,b){
+  x = a.x - b.x
+  y = a.y - b.y
+  return {
+          x: x,
+          y: y,
+          z: 0
+         }
+}
+
+function mix(a,b,t){
+  x = a.x + (b.x - a.x)*t
+  y = a.y + (b.y - a.y)*t
+  return {
+           x:x,
+           y:y,
+           z:0
+         }
+}
+  
+function isPositive(n){
+ if(n>0){return true}else{return false}
+}
